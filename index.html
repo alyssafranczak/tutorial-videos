@@ -205,6 +205,11 @@
     </style>
 </head>
 <body>
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-btn">Gallery</a>
+        <a href="submit.html" class="nav-btn">Upload a Video</a>
+    </nav>
+
     <!-- Search & Filter -->
     <div class="video-controls">
         <input type="text" id="searchInput" placeholder="Search videos..." />
@@ -273,11 +278,11 @@
                 const card = document.createElement("div");
                 card.className = "video-card";
                 card.innerHTML = `
-              <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-              <div class="category">${data.category}</div>
-              <h3>${data.title}</h3>
-              <p>${truncateText(data.description, 120)}</p>
-            `;
+                  <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                  <div class="category">${data.category}</div>
+                  <h3>${data.title}</h3>
+                  <p>${truncateText(data.description, 120)}</p>
+                `;
 
                 card.addEventListener("click", () => {
                     document.getElementById("modalVideo").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;

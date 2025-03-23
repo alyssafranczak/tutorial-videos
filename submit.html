@@ -2,120 +2,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Submit a Video</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 40px;
-      background: #f5f5f5;
-    }
-    form {
-      max-width: 600px;
-      background: white;
-      padding: 24px;
-      border-radius: 12px;
-      margin: auto;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    label {
-      display: block;
-      margin-top: 16px;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    button {
-      margin-top: 20px;
-      padding: 12px 20px;
-      font-size: 1rem;
-      background: black;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .success-message {
-      text-align: center;
-      color: green;
-      margin-top: 16px;
-    }
-  </style>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit a Video</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            background: #f5f5f5;
+        }
+
+        form {
+            max-width: 600px;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .success-message {
+            text-align: center;
+            color: green;
+            margin-top: 16px;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 16px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+            .nav-btn:hover {
+                background: #333;
+            }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <form id="videoForm">
-    <h1>Submit a Video</h1>
-    <label for="title">Title</label>
-    <input type="text" id="title" required>
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-btn">Gallery</a>
+        <a href="submit.html" class="nav-btn">Upload a Video</a>
+    </nav>
+    <form id="videoForm">
+        <h1>Submit a Video</h1>
+        <label for="title">Title</label>
+        <input type="text" id="title" required>
 
-    <label for="description">Description</label>
-    <textarea id="description" rows="4" required></textarea>
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" required></textarea>
 
-    <label for="category">Category</label>
-    <select id="category" required>
-      <option value="" disabled selected>Select a year</option>
-      <option value="2022">2022</option>
-      <option value="2023">2023</option>
-      <option value="2024">2024</option>
-      <option value="2025">2025</option>
-    </select>
+        <label for="category">Category</label>
+        <select id="category" required>
+            <option value="" disabled selected>Select a year</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+        </select>
 
-    <label for="link">YouTube Link</label>
-    <input type="url" id="link" required>
+        <label for="link">YouTube Link</label>
+        <input type="url" id="link" required>
 
-    <button type="submit">Submit Video</button>
-    <p class="success-message" id="successMsg" style="display:none;">Video submitted successfully!</p>
-  </form>
+        <button type="submit">Submit Video</button>
+        <p class="success-message" id="successMsg" style="display:none;">Video submitted successfully!</p>
+    </form>
 
-  <script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyCQM2yxLE9RIQoBpUAkW0x6OXzUaHskkbM",
-        authDomain: "gptutorialsdatabase.firebaseapp.com",
-        projectId: "gptutorialsdatabase",
-        storageBucket: "gptutorialsdatabase.firebasestorage.app",
-        messagingSenderId: "893730349841",
-        appId: "1:893730349841:web:fb3c03bf95e50967d562b0",
-        measurementId: "G-G9HN9VCYHM"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQM2yxLE9RIQoBpUAkW0x6OXzUaHskkbM",
+            authDomain: "gptutorialsdatabase.firebaseapp.com",
+            projectId: "gptutorialsdatabase",
+            storageBucket: "gptutorialsdatabase.firebasestorage.app",
+            messagingSenderId: "893730349841",
+            appId: "1:893730349841:web:fb3c03bf95e50967d562b0",
+            measurementId: "G-G9HN9VCYHM"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-    const form = document.getElementById("videoForm");
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const title = document.getElementById("title").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const category = document.getElementById("category").value;
-      const link = document.getElementById("link").value.trim();
+        const form = document.getElementById("videoForm");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const title = document.getElementById("title").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const category = document.getElementById("category").value;
+            const link = document.getElementById("link").value.trim();
 
-      try {
-        await db.collection("videos").add({
-          title,
-          description,
-          category,
-          link,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            try {
+                await db.collection("videos").add({
+                    title,
+                    description,
+                    category,
+                    link,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                form.reset();
+                document.getElementById("successMsg").style.display = "block";
+            } catch (err) {
+                alert("Error submitting video. Check console.");
+                console.error(err);
+            }
         });
-        form.reset();
-        document.getElementById("successMsg").style.display = "block";
-      } catch (err) {
-        alert("Error submitting video. Check console.");
-        console.error(err);
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
