@@ -238,112 +238,112 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-    let allVideos = [];
+        let allVideos = [];
 
-    function truncateText(text, maxLength) {
-      return text.length > maxLength ? text.slice(0, maxLength).trim() + "..." : text;
-    }
-
-    function renderVideos(videos, activeCategory = "") {
-      const container = document.getElementById("videoGallery");
-      container.innerHTML = "";
-
-      const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-
-      const filtered = videos.filter(video => {
-        const matchesCategory = activeCategory ? video.category === activeCategory : true;
-        const matchesSearch = video.title.toLowerCase().includes(searchTerm) ||
-                              video.description.toLowerCase().includes(searchTerm);
-        return matchesCategory && matchesSearch;
-      });
-
-      if (filtered.length === 0) {
-        container.innerHTML = "<p style='text-align:center;'>No videos found.</p>";
-      }
-
-      filtered.forEach(data => {
-        const videoId = data.link.includes("youtube.com")
-          ? data.link.split("v=")[1]?.split("&")[0]
-          : data.link.includes("youtu.be")
-            ? data.link.split("/").pop()
-            : null;
-
-        if (!videoId) return;
-
-        const card = document.createElement("div");
-        card.className = "video-card";
-        card.innerHTML = `
-          <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-          <div class="category">${data.category}</div>
-          <h3>${data.title}</h3>
-          <p>${truncateText(data.description, 120)}</p>
-        `;
-
-        card.addEventListener("click", () => {
-          document.getElementById("modalVideo").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-          document.getElementById("modalTitle").innerText = data.title;
-          document.getElementById("modalCategory").innerText = data.category;
-          document.getElementById("modalDescription").innerText = data.description;
-          document.getElementById("videoModal").style.display = "flex";
-          document.body.classList.add("modal-open");
-        });
-
-        container.appendChild(card);
-      });
-    }
-
-    function renderFilters(videos) {
-      const uniqueCategories = [...new Set(videos.map(v => v.category))]
-        .sort((a, b) => {
-          const numA = parseInt(a), numB = parseInt(b);
-          if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-          return a.localeCompare(b);
-        });
-
-      const filterContainer = document.getElementById("filterButtons");
-      filterContainer.innerHTML = `<button class="filter-btn active" data-category="">All</button>`;
-      uniqueCategories.forEach(cat => {
-        filterContainer.innerHTML += `<button class="filter-btn" data-category="${cat}">${cat}</button>`;
-      });
-
-      filterContainer.querySelectorAll(".filter-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-          filterContainer.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-          renderVideos(allVideos, btn.getAttribute("data-category"));
-        });
-      });
-    }
-
-    document.getElementById("searchInput").addEventListener("input", () => {
-      const activeBtn = document.querySelector(".filter-btn.active");
-      const activeCategory = activeBtn ? activeBtn.getAttribute("data-category") : "";
-      renderVideos(allVideos, activeCategory);
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      document.querySelector(".close-modal").addEventListener("click", () => {
-        document.getElementById("videoModal").style.display = "none";
-        document.getElementById("modalVideo").src = "";
-        document.body.classList.remove("modal-open");
-      });
-
-      window.addEventListener("click", (e) => {
-        if (e.target === document.getElementById("videoModal")) {
-          document.getElementById("videoModal").style.display = "none";
-          document.getElementById("modalVideo").src = "";
-          document.body.classList.remove("modal-open");
+        function truncateText(text, maxLength) {
+            return text.length > maxLength ? text.slice(0, maxLength).trim() + "..." : text;
         }
-      });
-    });
 
-    db.collection("videos")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        allVideos = snapshot.docs.map(doc => doc.data());
-        renderFilters(allVideos);
-        renderVideos(allVideos);
-      });
+        function renderVideos(videos, activeCategory = "") {
+            const container = document.getElementById("videoGallery");
+            container.innerHTML = "";
+
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+
+            const filtered = videos.filter(video => {
+                const matchesCategory = activeCategory ? video.category === activeCategory : true;
+                const matchesSearch = video.title.toLowerCase().includes(searchTerm) ||
+                    video.description.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>No videos found.</p>";
+            }
+
+            filtered.forEach(data => {
+                const videoId = data.link.includes("youtube.com")
+                    ? data.link.split("v=")[1]?.split("&")[0]
+                    : data.link.includes("youtu.be")
+                        ? data.link.split("/").pop()
+                        : null;
+
+                if (!videoId) return;
+
+                const card = document.createElement("div");
+                card.className = "video-card";
+                card.innerHTML = `
+              <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+              <div class="category">${data.category}</div>
+              <h3>${data.title}</h3>
+              <p>${truncateText(data.description, 120)}</p>
+            `;
+
+                card.addEventListener("click", () => {
+                    document.getElementById("modalVideo").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                    document.getElementById("modalTitle").innerText = data.title;
+                    document.getElementById("modalCategory").innerText = data.category;
+                    document.getElementById("modalDescription").innerText = data.description;
+                    document.getElementById("videoModal").style.display = "flex";
+                    document.body.classList.add("modal-open");
+                });
+
+                container.appendChild(card);
+            });
+        }
+
+        function renderFilters(videos) {
+            const uniqueCategories = [...new Set(videos.map(v => v.category))]
+                .sort((a, b) => {
+                    const numA = parseInt(a), numB = parseInt(b);
+                    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+                    return a.localeCompare(b);
+                });
+
+            const filterContainer = document.getElementById("filterButtons");
+            filterContainer.innerHTML = `<button class="filter-btn active" data-category="">All</button>`;
+            uniqueCategories.forEach(cat => {
+                filterContainer.innerHTML += `<button class="filter-btn" data-category="${cat}">${cat}</button>`;
+            });
+
+            filterContainer.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    filterContainer.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+                    btn.classList.add("active");
+                    renderVideos(allVideos, btn.getAttribute("data-category"));
+                });
+            });
+        }
+
+        document.getElementById("searchInput").addEventListener("input", () => {
+            const activeBtn = document.querySelector(".filter-btn.active");
+            const activeCategory = activeBtn ? activeBtn.getAttribute("data-category") : "";
+            renderVideos(allVideos, activeCategory);
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelector(".close-modal").addEventListener("click", () => {
+                document.getElementById("videoModal").style.display = "none";
+                document.getElementById("modalVideo").src = "";
+                document.body.classList.remove("modal-open");
+            });
+
+            window.addEventListener("click", (e) => {
+                if (e.target === document.getElementById("videoModal")) {
+                    document.getElementById("videoModal").style.display = "none";
+                    document.getElementById("modalVideo").src = "";
+                    document.body.classList.remove("modal-open");
+                }
+            });
+        });
+
+        db.collection("videos")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot) => {
+                allVideos = snapshot.docs.map(doc => doc.data());
+                renderFilters(allVideos);
+                renderVideos(allVideos);
+            });
     </script>
 </body>
 </html>
