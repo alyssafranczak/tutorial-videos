@@ -84,8 +84,8 @@
             }
 
             .video-card h3 {
-                margin-top: 8px;
-                margin-bottom: 4px;
+/*               margin-top: 8px;
+*/                margin-bottom: 4px;
                 font-size: 1.2rem;
             }
 
@@ -96,7 +96,8 @@
                 font-size: 0.85rem;
                 padding: 4px 10px;
                 border-radius: 999px;
-                margin-bottom: 6px;
+                margin-top: 4px;
+                margin-bottom: 4px;
             }
 
             .video-card p {
@@ -106,6 +107,7 @@
                 margin: 0;
                 max-height: 4.2em;
                 overflow: hidden;
+                word-break: break-word;
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 -webkit-line-clamp: 3;
@@ -174,6 +176,19 @@
                 line-height: 1.4;
                 margin-bottom: 6px;
                 word-break: break-word;
+            }
+
+            .modal-content::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .modal-content::-webkit-scrollbar-thumb {
+                background-color: rgba(0,0,0,0.2);
+                border-radius: 999px;
+            }
+
+            .modal-content::-webkit-scrollbar-track {
+                background: transparent;
             }
 
         .close-modal {
