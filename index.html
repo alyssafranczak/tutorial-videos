@@ -351,11 +351,21 @@
         }
 
         function renderFilters(videos) {
+            const seasonOrder = {
+                "Spring": 0,
+                "Summer": 1,
+                "Fall": 2
+            };
+
             const uniqueCategories = [...new Set(videos.map(v => v.category))]
                 .sort((a, b) => {
-                    const numA = parseInt(a), numB = parseInt(b);
-                    if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
-                    return a.localeCompare(b);
+                    const [seasonA, yearA] = a.split(" ");
+                    const [seasonB, yearB] = b.split(" ");
+
+                    const yearDiff = parseInt(yearA) - parseInt(yearB);
+                    if (yearDiff !== 0) return yearDiff;
+
+                    return seasonOrder[seasonA] - seasonOrder[seasonB];
                 });
 
             const filterContainer = document.getElementById("filterButtons");
