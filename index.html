@@ -10,11 +10,20 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
     <style>
+        :root {
+            --color-light: #F9F0FB;
+            --color-background: #CAD5CA;
+            --color-background-dark: ##AEBEAE;
+            --color-accent-light: #8075FF;
+            --color-accent-bold: #6321EE;
+            --color-dark: #211A1D;
+        }
+
         body {
             font-family: sans-serif;
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
+            background: var(--color-background);
         }
 
         .video-controls {
@@ -222,6 +231,7 @@
         }
 
         .nav-bar {
+            background-color: var(--color-background-dark);
             display: flex;
             justify-content: center;
             gap: 16px;
