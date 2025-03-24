@@ -84,8 +84,8 @@
             }
 
             .video-card h3 {
-/*               margin-top: 8px;
-*/                margin-bottom: 4px;
+                margin-top: 2px;
+                margin-bottom: 4px;
                 font-size: 1.2rem;
             }
 
@@ -97,7 +97,7 @@
                 padding: 4px 10px;
                 border-radius: 999px;
                 margin-top: 4px;
-                margin-bottom: 4px;
+                margin-bottom: 2px;
             }
 
             .video-card p {
@@ -322,11 +322,11 @@
                 const card = document.createElement("div");
                 card.className = "video-card";
                 card.innerHTML = `
-                      <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
-                      <div class="category">${data.category}</div>
-                      <h3>${data.title}</h3>
-                      <p>${truncateText(data.description, 120)}</p>
-                    `;
+                          <iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe>
+                          <div class="category">${data.category}</div>
+                          <h3>${data.title}</h3>
+                          <p>${truncateText(data.description, 120)}</p>
+                        `;
 
                 card.addEventListener("click", () => {
                     document.getElementById("modalVideo").src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
