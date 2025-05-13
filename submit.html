@@ -95,10 +95,6 @@
                 background: #333;
             }
     </style>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-check-compat.js"></script>
-
 </head>
 <body>
     <nav class="nav-bar">
@@ -131,51 +127,57 @@
         <p class="success-message" id="successMsg" style="display:none;">Video submitted successfully!</p>
     </form>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCQM2yxLE9RIQoBpUAkW0x6OXzUaHskkbM",
-            authDomain: "gptutorialsdatabase.firebaseapp.com",
-            projectId: "gptutorialsdatabase",
-            storageBucket: "gptutorialsdatabase.firebasestorage.app",
-            messagingSenderId: "893730349841",
-            appId: "1:893730349841:web:fb3c03bf95e50967d562b0",
-            measurementId: "G-G9HN9VCYHM"
-        };
-        firebase.initializeApp(firebaseConfig);
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-check-compat.js"></script>
 
-        const appCheck = firebase.appCheck();
-        appCheck.activate(
-          '6LfEnTcrAAAAAEKJDhvB7imuQx3w0AlVmiyKMjIH', // Get this from Firebase Console when enabling App Check
-          true // Set to true to enable automatic token refresh
-        );
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCQM2yxLE9RIQoBpUAkW0x6OXzUaHskkbM",
+    authDomain: "gptutorialsdatabase.firebaseapp.com",
+    projectId: "gptutorialsdatabase",
+    storageBucket: "gptutorialsdatabase.firebasestorage.app",
+    messagingSenderId: "893730349841",
+    appId: "1:893730349841:web:fb3c03bf95e50967d562b0",
+    measurementId: "G-G9HN9VCYHM"
+  };
 
-        appCheck.getToken(true).then(token => console.log("App Check token:", token.token));
-        
-        const db = firebase.firestore();
+  firebase.initializeApp(firebaseConfig);
 
-        const form = document.getElementById("videoForm");
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const title = document.getElementById("title").value.trim();
-            const description = document.getElementById("description").value.trim();
-            const category = document.getElementById("category").value;
-            const link = document.getElementById("link").value.trim();
+  const appCheck = firebase.appCheck();
+  appCheck.activate('6LfEnTcrAAAAAEKJDhvB7imuQx3w0AlVmiyKMjIH', true); // Replace with your actual reCAPTCHA v3 site key
 
-            try {
-                await db.collection("videos").add({
-                    title,
-                    description,
-                    category,
-                    link,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                form.reset();
-                document.getElementById("successMsg").style.display = "block";
-            } catch (err) {
-                alert("Error submitting video. Check console.");
-                console.error(err);
-            }
+  // ✅ Wait for App Check token before using Firestore
+  firebase.appCheck().getToken().then(() => {
+    const db = firebase.firestore();
+
+    const form = document.getElementById("videoForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const category = document.getElementById("category").value;
+      const link = document.getElementById("link").value.trim();
+
+      try {
+        await db.collection("videos").add({
+          title,
+          description,
+          category,
+          link,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-    </script>
+        form.reset();
+        document.getElementById("successMsg").style.display = "block";
+      } catch (err) {
+        alert("Error submitting video. Check console.");
+        console.error(err);
+      }
+    });
+  }).catch((err) => {
+    console.error("App Check token failed to load:", err);
+    alert("App Check error – Firestore is unavailable.");
+  });
+</script>
 </body>
 </html>
