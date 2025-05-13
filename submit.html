@@ -97,6 +97,8 @@
     </style>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-check-compat.js"></script>
+
 </head>
 <body>
     <nav class="nav-bar">
@@ -140,6 +142,13 @@
             measurementId: "G-G9HN9VCYHM"
         };
         firebase.initializeApp(firebaseConfig);
+
+        const appCheck = firebase.appCheck();
+        appCheck.activate(
+          '6LfEnTcrAAAAAEKJDhvB7imuQx3w0AlVmiyKMjIH', // Get this from Firebase Console when enabling App Check
+          true // Set to true to enable automatic token refresh
+        );
+        
         const db = firebase.firestore();
 
         const form = document.getElementById("videoForm");
