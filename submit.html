@@ -148,6 +148,8 @@
           '6LfEnTcrAAAAAEKJDhvB7imuQx3w0AlVmiyKMjIH', // Get this from Firebase Console when enabling App Check
           true // Set to true to enable automatic token refresh
         );
+
+        appCheck.getToken(true).then(token => console.log("App Check token:", token.token));
         
         const db = firebase.firestore();
 
